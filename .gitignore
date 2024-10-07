@@ -1,9 +1,7 @@
 # Ignore environment variables file
 .env
 ./clean_history.sh
-# Ignore files containing sensitive information
-Default.xaml
-Gmail_Email_Fetch_Extract/Default.xaml
+ 
 
 # Ignore Visual Studio files
 *.suo

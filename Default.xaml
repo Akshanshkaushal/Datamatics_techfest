@@ -1,0 +1,208 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TruBotDesigner.Workflow" this:Workflow.QueueName=""
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:av="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+ xmlns:dtsac="clr-namespace:DGSL.TruBot.Studio.AutomationLib.Cockpit;assembly=DGSL.TruBot.Studio.AutomationLib.Cockpit"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:tca="clr-namespace:TruBot.Core.Activities;assembly=TruBot.Core.Activities"
+ xmlns:tca1="clr-namespace:TruBot.Cockpit.Activities;assembly=TruBot.Cockpit.Activities"
+ xmlns:tg="clr-namespace:TruBot.GoogleApp;assembly=TruBot.GoogleApp"
+ xmlns:tga="clr-namespace:TruBot.GoogleApp.Activities;assembly=TruBot.GoogleApp.Activities"
+ xmlns:tgm="clr-namespace:TruBot.GoogleApp.Models;assembly=TruBot.GoogleApp"
+ xmlns:this="clr-namespace:TruBotDesigner"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="QueueName" Type="InArgument(x:String)" />
+  </x:Members>
+  <sap2010:WorkflowViewState.IdRef>TruBotDesigner.Workflow_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>WorkflowExecutorExtensions</x:String>
+      <x:String>System.Activities</x:String>
+      <x:String>DGSL.TruBot.Studio.AutomationLib.Cockpit</x:String>
+      <x:String>System</x:String>
+      <x:String>Newtonsoft.Json.Linq</x:String>
+      <x:String>Newtonsoft.Json</x:String>
+      <x:String>System.Collections</x:String>
+      <x:String>TruBot.GoogleApp.Models</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>TruBotExecutor</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>DGSL.TruBot.Studio.AutomationLib.Cockpit</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ValueTuple</AssemblyReference>
+      <AssemblyReference>TruBot.Cryptography</AssemblyReference>
+      <AssemblyReference>TruBot.Email</AssemblyReference>
+      <AssemblyReference>TruBot.FTP.Activities</AssemblyReference>
+      <AssemblyReference>TruBot.PDF</AssemblyReference>
+      <AssemblyReference>System.Memory</AssemblyReference>
+      <AssemblyReference>Microsoft.Bcl.AsyncInterfaces</AssemblyReference>
+      <AssemblyReference>System.ComponentModel.Composition</AssemblyReference>
+      <AssemblyReference>System.Runtime.WindowsRuntime</AssemblyReference>
+      <AssemblyReference>Newtonsoft.Json</AssemblyReference>
+      <AssemblyReference>DevExpress.Printing.v20.1.Core</AssemblyReference>
+      <AssemblyReference>TruBot.GoogleApp</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Flowchart sap2010:WorkflowViewState.IdRef="Flowchart_1">
+    <Flowchart.Variables>
+      <Variable x:TypeArguments="dtsac:QueueRecord" Name="TransactionRecord" />
+      <Variable x:TypeArguments="x:Boolean" Name="StopBot" />
+      <Variable x:TypeArguments="x:Boolean" Default="True" Name="ExitQueue" />
+      <Variable x:TypeArguments="x:String" Name="SystemException" />
+      <Variable x:TypeArguments="tgm:GmailMessage[]" Name="gList" />
+      <Variable x:TypeArguments="x:String" Name="GoogleOAuthClientId">
+        <Variable.Default>
+          <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="System.Environment.GetEnvironmentVariable(&quot;GOOGLE_OAUTH_CLIENT_ID&quot;)" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Name="GoogleOAuthClientSecret">
+        <Variable.Default>
+          <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="System.Environment.GetEnvironmentVariable(&quot;GOOGLE_OAUTH_CLIENT_SECRET&quot;)" />
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:String" Name="UserEmail">
+        <Variable.Default>
+          <mva:VisualBasicValue x:TypeArguments="x:String" ExpressionText="System.Environment.GetEnvironmentVariable(&quot;USER_EMAIL&quot;)" />
+        </Variable.Default>
+      </Variable>
+    </Flowchart.Variables>
+    <Flowchart.StartNode>
+      <FlowStep x:Name="__ReferenceID1" sap2010:WorkflowViewState.IdRef="FlowStep_62">
+        <tga:GoogleSheetApplScope ApiKey="{x:Null}" AuthenticationType="OAuthClientID" DisplayName="GSuite Application Scope" HasDomainWideAccesss="False" sap2010:WorkflowViewState.IdRef="GoogleSheetApplScope_1" KeyPath="{x:Null}" KeyType="JSON" Password="{x:Null}" Pause="True" ServiceAccountEmail="{x:Null}" Services="Gmail" UserEmail="akshanshkaushal9@gmail.com" UserID="[GoogleOAuthClientId]" UserPassword="[GoogleOAuthClientSecret]" Username="Gmail API OAuth Client">
+          <tga:GoogleSheetApplScope.Body>
+            <ActivityAction x:TypeArguments="tg:SimpleObjectContainer">
+              <ActivityAction.Argument>
+                <DelegateInArgument x:TypeArguments="tg:SimpleObjectContainer" Name="GoogleApplicationScope" />
+              </ActivityAction.Argument>
+              <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_109">
+                <tga:RetrieveEmail AuthScopesInvalid="False" DisplayName="Retrieve Email" EmailsRetrieved="[gList]" sap2010:WorkflowViewState.IdRef="RetrieveEmail_2" MarkasRead="False" MaxResults="30" Pause="True" SearchExpression="from:akshanshkaushal9@gmail.com">
+                  <tga:RetrieveEmail.FilterLabels>
+                    <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                  </tga:RetrieveEmail.FilterLabels>
+                </tga:RetrieveEmail>
+              </Sequence>
+            </ActivityAction>
+          </tga:GoogleSheetApplScope.Body>
+        </tga:GoogleSheetApplScope>
+        <FlowStep.Next>
+          <FlowStep x:Name="__ReferenceID2" sap2010:WorkflowViewState.IdRef="FlowStep_61">
+            <tca:ForEach x:TypeArguments="tgm:GmailMessage" ElementIndex="{x:Null}" DisplayName="For Each" sap2010:WorkflowViewState.IdRef="ForEach`1_19" Pause="True" Values="{x:Null}">
+              <tca:ForEach.Body>
+                <ActivityAction x:TypeArguments="tgm:GmailMessage">
+                  <ActivityAction.Argument>
+                    <DelegateInArgument x:TypeArguments="tgm:GmailMessage" Name="Item" />
+                  </ActivityAction.Argument>
+                  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_111">
+                    <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_110" />
+                    <WriteLine DisplayName="WriteLine" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[item.Subject]" TextWriter="{x:Null}" />
+                    <WriteLine DisplayName="WriteLine" sap2010:WorkflowViewState.IdRef="WriteLine_2" Text="[item.Body]" TextWriter="{x:Null}" />
+                  </Sequence>
+                </ActivityAction>
+              </tca:ForEach.Body>
+            </tca:ForEach>
+            <FlowStep.Next>
+              <FlowStep x:Name="__ReferenceID0" sap2010:WorkflowViewState.IdRef="FlowStep_59">
+                <Sequence DisplayName="End Process" sap2010:WorkflowViewState.IdRef="Sequence_108">
+                  <tca:LogMessage DisplayName="Log Message" sap2010:WorkflowViewState.IdRef="LogMessage_2" Level="Information" Message="Process has been completed." Pause="True" />
+                  <tca1:SendProgressLog DisplayName="Send Progress Log" sap2010:WorkflowViewState.IdRef="SendProgressLog_29" Name="{x:Null}" Pause="True" Percentage="100" ProgressLogStatus="Successful" Status="Successful" StepsNo="0" StepsNumber="0" />
+                </Sequence>
+              </FlowStep>
+            </FlowStep.Next>
+          </FlowStep>
+        </FlowStep.Next>
+      </FlowStep>
+    </Flowchart.StartNode>
+    <x:Reference>__ReferenceID0</x:Reference>
+    <x:Reference>__ReferenceID1</x:Reference>
+    <x:Reference>__ReferenceID2</x:Reference>
+    <sads:DebugSymbol.Symbol>dzREOlxOZXcgZm9sZGVyXEdtYWlsX0VtYWlsX0ZldGNoX0V4dHJhY3RcRGVmYXVsdC54YW1sGgFlAWYBAjkDcw8CAQE9NT07AgECQwlSJAIBEFUNYhsCAQllEWgcAgEDQ84DQ/MDAgEaQ/YCQ8ADAgEZQ/0DQ5UEAgEYQ9ICQ+4CAgEXSQ9PGgIBEVsTXx4CAQpmE2a1AQIBB2cTZ/0BAgEEShFOJQIBElwVXGMCAQ9dFV2UAQIBDV4VXpEBAgELZogBZqUBAgEIZ6YBZ6sBAgEGZ/cBZ/oBAgEFSmtKdAIBFUroAUqJAgIBFErFAUrJAQIBE11rXXsCAQ5ea154AgEM</sads:DebugSymbol.Symbol>
+  </Flowchart>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="RetrieveEmail_2" sap:VirtualizedContainerService.HintSize="431.2,82.4" />
+      <sap2010:ViewStateData Id="Sequence_109" sap:VirtualizedContainerService.HintSize="450.4,175.2" />
+      <sap2010:ViewStateData Id="GoogleSheetApplScope_1" sap:VirtualizedContainerService.HintSize="461.6,261.6">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_110" sap:VirtualizedContainerService.HintSize="207.2,84.8" />
+      <sap2010:ViewStateData Id="WriteLine_1" sap:VirtualizedContainerService.HintSize="207.2,62.4" />
+      <sap2010:ViewStateData Id="WriteLine_2" sap:VirtualizedContainerService.HintSize="207.2,62.4" />
+      <sap2010:ViewStateData Id="Sequence_111" sap:VirtualizedContainerService.HintSize="226.4,382.4" />
+      <sap2010:ViewStateData Id="ForEach`1_19" sap:VirtualizedContainerService.HintSize="200,52.8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="LogMessage_2" sap:VirtualizedContainerService.HintSize="311.2,87.2" />
+      <sap2010:ViewStateData Id="SendProgressLog_29" sap:VirtualizedContainerService.HintSize="311.2,22.4">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_108" sap:VirtualizedContainerService.HintSize="200,52.8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_59">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">200,266.02</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_61">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">200,183.6</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">300,236.4 300,266.02</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="FlowStep_62">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <av:Point x:Key="ShapeLocation">200,103.6</av:Point>
+            <av:Size x:Key="ShapeSize">200,52.8</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">300,156.4 300,183.6</av:PointCollection>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Flowchart_1" sap:VirtualizedContainerService.HintSize="631.2,636.8">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <av:Point x:Key="ShapeLocation">270,2.4</av:Point>
+            <av:Size x:Key="ShapeSize">60,75.2</av:Size>
+            <av:PointCollection x:Key="ConnectorLocation">300,77.6 300,103.6</av:PointCollection>
+            <x:Double x:Key="Width">620</x:Double>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TruBotDesigner.Workflow_1" sap:VirtualizedContainerService.HintSize="671.2,716.8" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
